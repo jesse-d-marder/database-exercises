@@ -1,0 +1,1 @@
+This repository is for practicing SQL. See https://ds.codeup.com/sql/mysql-introduction/
