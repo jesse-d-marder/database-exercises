@@ -36,7 +36,12 @@ SELECT emp_no, first_name, last_name
 FROM employees
 WHERE last_name LIKE 'E%'
 	OR last_name LIKE '%E';
-# 30723 rows returned. 30723 - 7330 = 23393 employess have a last name that ends with 'E' but does not start with 'E'
+# 30723 rows returned. 30723 - 7330 = 23393 employees have a last name that ends with 'E' but does not start with 'E'
+# Double check:
+SELECT emp_no, first_name, last_name
+FROM employees
+WHERE last_name LIKE '%E'
+	AND last_name NOT LIKE 'E%';
 
 # 7 - Last name starts and ends with 'E'
 SELECT emp_no, first_name, last_name
