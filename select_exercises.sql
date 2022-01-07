@@ -10,29 +10,29 @@ DESCRIBE albums;
 SELECT DISTINCT artist FROM albums; # Reveals 23 rows, so 23 unique artist names
 
 # 3.c. What is the primary key for the albums table?
-SHOW CREATE TABLE albums; # This reveals the primary key is 'id'. Also discovered via "Structure tab"
+SHOW CREATE TABLE albums; # This reveals the primary key is 'id'. Also discovered via 'Structure tab'
 
 # 3.d. What are the oldest and most recent release dates among the albums?
-# Sorting data by release date reveals the oldest album in the Table is the Beatles' "Sgt. Pepper's Lonely Hearts Club Band" and the most recent is Adele's "21"
+# Sorting data (manually) by release date reveals the oldest album in the Table is the Beatles' 'Sgt. Pepper's Lonely Hearts Club Band' and the most recent is Adele's '21'
 
 # 4.a. Name of all albums by Pink Floyd:
-SELECT name AS "Pink Floyd Albums" FROM albums WHERE  artist = "Pink Floyd";
+SELECT name AS 'Pink Floyd Albums' FROM albums WHERE  artist = 'Pink Floyd';
 
-# 4.b. Release year of "Sgt. Pepper's Lonely Hearts Club Band"
-SELECT release_date AS "Sgt Pepper Release Year" FROM albums WHERE name = "Sgt. Pepper's Lonely Hearts Club Band";
+# 4.b. Release year of 'Sgt. Pepper's Lonely Hearts Club Band'
+SELECT release_date AS 'Sgt Pepper Release Year' FROM albums WHERE name = 'Sgt. Pepper\'s Lonely Hearts Club Band';
 
 # 4.c. Genre for the album Nevermind
-SELECT genre AS "Nevermind genre" FROM albums WHERE name = "Nevermind";
+SELECT genre AS 'Nevermind genre' FROM albums WHERE name = 'Nevermind';
 
 # 4.d. Which albums released in the 1990s
-SELECT name AS "90s albums" FROM albums WHERE release_date BETWEEN '1990' and '1999';
+SELECT name AS '90s albums' FROM albums WHERE release_date BETWEEN '1990' and '1999';
 
 # 4.e. Which albums had less than 20 million certified sales
-SELECT name AS "Low selling (<20M)" FROM albums WHERE sales < 20;
+SELECT name AS 'Low selling (<20M)' FROM albums WHERE sales < 20;
 
 # 4.f. All albums with genre of "Rock"
-SELECT name AS "Pure Rock albums" FROM albums WHERE genre = "Rock";
-	# These results only include results that exactly match the genre "Rock"
+SELECT name AS 'Pure Rock albums' FROM albums WHERE genre = 'Rock';
+	# These results only include results that exactly match the genre 'Rock'
 	
 # If we want results to include results such as Progressive or Hard Rock:
-	SELECT name AS "All types of Rock albums" FROM albums WHERE genre LIKE "%Rock%";
+	SELECT name AS 'All types of Rock albums' FROM albums WHERE genre LIKE '%Rock%';
