@@ -10,7 +10,7 @@ DESCRIBE albums;
 SELECT DISTINCT artist FROM albums; # Reveals 23 rows, so 23 unique artist names
 
 # 3.c. What is the primary key for the albums table?
-SHOW CREATE TABLE albums; # This reveals the primary key is 'id'. Also discovered via 'Structure tab'
+SHOW CREATE TABLE albums; # This reveals the primary key is 'id'. Also discovered via 'Structure' tab
 
 # 3.d. What are the oldest and most recent release dates among the albums?
 # Sorting data (manually) by release date reveals the oldest album in the Table is the Beatles' 'Sgt. Pepper's Lonely Hearts Club Band' and the most recent is Adele's '21'
