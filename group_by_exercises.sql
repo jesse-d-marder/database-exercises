@@ -3,12 +3,15 @@
 USE employees;
 
 # 2 - Distinct titles
+SELECT DISTINCT title 
+FROM titles;
+
 SELECT count(DISTINCT title) AS unique_titles
 FROM titles;
 # There are 7 unique titles
 
 # 3 - List all unique last names that start and end with 'E' using GROUP BY
-SELECT DISTINCT last_name
+SELECT last_name
 FROM employees
 GROUP BY last_name
 HAVING last_name LIKE 'E%E';
@@ -21,14 +24,14 @@ Erbe
 */
 
 # 4 - Find all unique combinations of first and last names for employees whose last names start and end with 'E'
-SELECT DISTINCT last_name, first_name
+SELECT last_name, first_name
 FROM employees
 GROUP BY last_name, first_name
 HAVING last_name LIKE 'E%E';
 # 846 rows returned
 
 # 5 - Find unique last names with a 'q' but not 'qu'
-SELECT DISTINCT last_name
+SELECT last_name
 FROM employees
 GROUP BY last_name
 HAVING (last_name LIKE '%q%'
@@ -41,7 +44,7 @@ Qiwen
 
 # 6 - Find the number of employees with the same last name for each of the unique last names with a 'q' but not 'qu'
 
-SELECT DISTINCT last_name, count(*)
+SELECT last_name, count(*)
 FROM employees
 GROUP BY last_name
 HAVING (last_name LIKE '%q%'
@@ -56,8 +59,9 @@ Qiwen	168
 
 SELECT first_name, gender, COUNT(*) AS qty_emp
 FROM employees
-GROUP BY first_name, gender
-HAVING first_name IN ('Irena','Vidya','Maya');
+WHERE first_name IN ('Irena','Vidya','Maya')
+GROUP BY first_name, gender;
+
 
 /*
 Vidya	M	151
@@ -70,7 +74,8 @@ Maya	M	146
 
 # 8 - Count of employees for each unique username. 
 
-SELECT LOWER(CONCAT(SUBSTR(first_name,1,1),SUBSTR(last_name,1,4),"_",SUBSTR(birth_date,6,2),SUBSTR(birth_date,3,2))) AS username, COUNT(*)
+SELECT LOWER
+	(CONCAT	(SUBSTR(first_name,1,1),	SUBSTR(last_name,1,4),	"_",	SUBSTR(birth_date,6,2),	SUBSTR(birth_date,3,2))) AS username, 		COUNT(*)
 FROM employees
 GROUP BY username;
 
@@ -79,7 +84,7 @@ SELECT LOWER(CONCAT(SUBSTR(first_name,1,1),SUBSTR(last_name,1,4),"_",SUBSTR(birt
 FROM employees
 GROUP BY username
 HAVING COUNT(*)>1;
-# Yes, there are duplicates. 13251 row are returned by this query so there are those many duplicate usernames
+# Yes, there are duplicates. 13251 row are returned by this query so there are that many duplicate usernames
 
 # 9 a - Avg Salary
 SELECT emp_no, AVG(salary)
@@ -89,6 +94,7 @@ GROUP BY emp_no;
 # 9 b - Current employees in each department
 SELECT dept_no, COUNT(*)
 FROM dept_emp
+WHERE to_date LIKE '99%'
 GROUP BY dept_no;
 
 # 9 c - How many salaries per employee
