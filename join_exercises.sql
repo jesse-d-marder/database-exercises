@@ -186,8 +186,8 @@ ON g.mgr_emp_no = mgr_emp.emp_no;
 
 # 12 - Who is the highest paid employee in each department
 
-SELECT h.dept_name AS 'Department Name', CONCAT (first_name, ' ',last_name) AS 'Highest Paid Employee', max_dept_sal FROM
-(SELECT g.dept_name, g.dept_no, emp_no, g.max_dept_sal FROM
+SELECT h.dept_name AS 'Department Name', CONCAT (e.first_name, ' ',e.last_name) AS 'Highest Paid Employee', max_dept_sal AS 'Highest Department Salary' FROM
+(SELECT * FROM
 (
 SELECT d.dept_name,
 		d.dept_no,
@@ -205,11 +205,69 @@ GROUP BY d.dept_name, d.dept_no) AS g
 
 JOIN salaries AS s
 ON s.salary = g.max_dept_sal
-JOIN departments AS d
-ON d.dept_name = g.dept_name
 WHERE s.to_date> CURDATE()) AS h
 
 JOIN employees AS e
 ON e.emp_no = h.emp_no
 ORDER BY max_dept_sal ASC; 
 
+## Walkthrough of 12
+# First produce table with Department Name and Max Salary per Department. DeptNo is useful for future joins ---- 
+SELECT d.dept_name, d.dept_no, MAX(s.salary) AS max_dept_sal
+FROM employees AS e # Start with employees
+JOIN dept_emp AS de
+ON de.emp_no = e.emp_no # Get department info for each employee
+JOIN salaries AS s
+ON s.emp_no = e.emp_no # Get salary info for each employee
+JOIN departments AS d
+ON d.dept_no = de.dept_no # Get department name for each department number
+WHERE s.to_date > CURDATE() AND
+		de.to_date > CURDATE() # Only want to compare salaries with those currently employed and those currently in the same department
+GROUP BY d.dept_name, d.dept_no;
+
+## Now we want to get the employees who match up with the max salary and dept number
+SELECT * FROM
+(
+SELECT d.dept_name,
+		d.dept_no,
+	   MAX(s.salary) AS max_dept_sal
+FROM employees AS e
+JOIN dept_emp AS de
+ON de.emp_no = e.emp_no
+JOIN salaries AS s
+ON s.emp_no = e.emp_no
+JOIN departments AS d
+ON d.dept_no = de.dept_no
+WHERE s.to_date > CURDATE() AND
+		de.to_date > CURDATE()
+GROUP BY d.dept_name, d.dept_no) AS g
+
+JOIN salaries AS s
+ON s.salary = g.max_dept_sal
+WHERE s.to_date> CURDATE();
+
+## Now we want the first and last names based on emp_no, so joining to employees Table
+SELECT h.dept_name AS 'Department Name', CONCAT (e.first_name, ' ',e.last_name) AS 'Highest Paid Employee', max_dept_sal AS 'Highest Department Salary' FROM
+(SELECT * FROM
+(
+SELECT d.dept_name,
+		d.dept_no,
+	   MAX(s.salary) AS max_dept_sal
+FROM employees AS e
+JOIN dept_emp AS de
+ON de.emp_no = e.emp_no
+JOIN salaries AS s
+ON s.emp_no = e.emp_no
+JOIN departments AS d
+ON d.dept_no = de.dept_no
+WHERE s.to_date > CURDATE() AND
+		de.to_date > CURDATE()
+GROUP BY d.dept_name, d.dept_no) AS g
+
+JOIN salaries AS s
+ON s.salary = g.max_dept_sal
+WHERE s.to_date> CURDATE()) AS h
+
+JOIN employees AS e
+ON e.emp_no = h.emp_no
+ORDER BY max_dept_sal ASC; 
