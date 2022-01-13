@@ -1,0 +1,1 @@
+# Exercises from https://ds.codeup.com/sql/temporary-tables/
