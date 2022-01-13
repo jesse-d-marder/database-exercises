@@ -24,9 +24,6 @@ JOIN
 employees as e #Employees table gives us the first and last names
 USING (emp_no);
 
-
-### try joining to de to get that to_date ! Do I need yet another alias'd table??
-
 # 2 - Return employee names and a new column 'alpha_group' that returns 'A-H','I-Q', or 'R-Z' depending on first letter of last name
 
 SELECT first_name, 
