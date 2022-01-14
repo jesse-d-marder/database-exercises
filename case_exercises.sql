@@ -4,7 +4,7 @@ USE employees;
 
 # 1 - Return employees, dept_no, start_date, end_date and new column is_current_employee
 
-SELECT first_name, last_name, hire_date, to_date, if(to_date>CURDATE(),1,0) AS is_current_employee
+SELECT first_name, last_name, hire_date, to_date, to_date>CURDATE() AS is_current_employee
 FROM employees
 JOIN dept_emp as de
 USING (emp_no);
@@ -65,9 +65,9 @@ WHERE de.to_date>CURDATE() AND s.to_date>CURDATE()) AS g
 GROUP BY dept_group
 ORDER BY avg_salary DESC;
 /*
-R&D	67709.26
 Sales & Marketing	86368.86
-Prod & QM	67328.50
 Finance & HR	71107.74
+R&D	67709.26
+Prod & QM	67328.50
 Customer Service	67285.23
 */
