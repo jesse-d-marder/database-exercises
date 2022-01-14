@@ -11,7 +11,8 @@ USE employees;
 CREATE TEMPORARY TABLE innis_1659.employees_with_departments AS 
 SELECT first_name, last_name, dept_name FROM employees
 JOIN dept_emp USING (emp_no)
-JOIN departments USING (dept_no);
+JOIN departments USING (dept_no)
+WHERE to_date>NOW();
 
 -- Change the current db.
 USE innis_1659;
