@@ -88,38 +88,4 @@ FROM innis_1659.employee_cur_avg
 ORDER BY zscore DESC;
 # Sales has top zscore of 1.48, human resources has zscore of 0.0066, so Sales is furthest from historical average and human resources is closest
 
-### OTHER ATTEMPTS #####
-
-# Compares current department average to historical department average
-SELECT dept_name, hist_dept_avg_salary, hist_dept_std_salary, cur_dept_avg_salary,
-(cur_dept_avg_salary-hist_dept_avg_salary)/hist_dept_std_salary AS zscore  
-FROM
-(SELECT AVG(salary) AS hist_dept_avg_salary, STDDEV(salary) AS hist_dept_std_salary, dept_name
-FROM salaries
-JOIN dept_emp
-	USING (emp_no)
-JOIN departments
-	USING (dept_no)
-GROUP BY dept_name) as hist
-JOIN innis_1659.employee_cur_avg
-USING (dept_name)
-ORDER BY zscore DESC;
-# Best to work in Human Resources now as it's got highest zscore of 0.68, worst to work in Sales where zscore is 0.47
-
-# Another way
-USE innis_1659;
-USE employees;
-
-SELECT dept_name, (cur_dept_avg_salary-hist_avg)/hist_std AS zscore FROM
-(SELECT dept_name, cur_dept_avg_salary, AVG(salary) AS hist_avg, STDDEV(salary) AS hist_std
-FROM innis_1659.employee_cur_avg
-JOIN departments
-	USING (dept_name)
-JOIN dept_emp
-	USING (dept_no)
-JOIN salaries
-	USING (emp_no)
-GROUP BY dept_name, cur_dept_avg_salary)
- as alldata
- ORDER BY zscore DESC;
 
