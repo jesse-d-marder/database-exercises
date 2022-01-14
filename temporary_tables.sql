@@ -67,6 +67,7 @@ SELECT * FROM sakila_cents;
 
 # 3 - How does current average pay in each department compare to overall, historical average pay? Use z-score for salaries. Which department is best/worst?
 USE innis_1659;
+USE employees;
 
 # Creates table with current department average
 CREATE TEMPORARY TABLE innis_1659.employee_cur_avg AS 
@@ -79,6 +80,14 @@ JOIN departments
 WHERE salaries.to_date>NOW() AND
 	dept_emp.to_date>NOW()
 GROUP BY dept_name;
+
+# Performing zscore calculation
+SELECT dept_name, (cur_dept_avg_salary-(SELECT AVG(salary) FROM salaries))/(SELECT STDDEV(salary) FROM salaries) AS zscore
+FROM innis_1659.employee_cur_avg
+ORDER BY zscore DESC;
+# Sales has top zscore of 1.48, human resources has zscore of 0.0066, so Sales is furthest from historical average and human resources is closest
+
+### OTHER ATTEMPTS #####
 
 # Compares current department average to historical department average
 SELECT dept_name, hist_dept_avg_salary, hist_dept_std_salary, cur_dept_avg_salary,
@@ -96,15 +105,12 @@ USING (dept_name)
 ORDER BY zscore DESC;
 # Best to work in Human Resources now as it's got highest zscore of 0.68, worst to work in Sales where zscore is 0.47
 
-SELECT * FROM innis_1659.employee_cur_avg;
+# Another way
+USE innis_1659;
+USE employees;
 
-
-# Compares current department average to historical overall average WORKING
-SELECT dept_name, 
-			(cur_dept_avg_salary-
-			(SELECT AVG(salary) FROM salaries))/
-			(SELECT STDDEV(salary) FROM salaries)
-			AS zscore  
+SELECT dept_name, (cur_dept_avg_salary-hist_avg)/hist_std AS zscore FROM
+(SELECT dept_name, cur_dept_avg_salary, AVG(salary) AS hist_avg, STDDEV(salary) AS hist_std
 FROM innis_1659.employee_cur_avg
 JOIN departments
 	USING (dept_name)
@@ -112,6 +118,7 @@ JOIN dept_emp
 	USING (dept_no)
 JOIN salaries
 	USING (emp_no)
-GROUP BY dept_name
-ORDER BY zscore DESC;
-# Best to work in Human Resources now as it's got highest zscore of 0.68, worst to work in Sales where zscore is 0.47
+GROUP BY dept_name, cur_dept_avg_salary)
+ as alldata
+ ORDER BY zscore DESC;
+
