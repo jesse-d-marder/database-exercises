@@ -151,9 +151,15 @@ WHERE pizza_id NOT IN (SELECT pizza_id FROM pizza_toppings);
 SELECT COUNT(order_id) FROM pizzas; # 20001
 
 # How many orders consist of pizza(s) that are only cheese? What is the average price of these orders? The most common pizza size?
-
-SELECT order_id
+SELECT order_id AS only_cheese_order_id,
+			size_price+modifier_price AS total_price # doesn't like the nulls
 FROM pizzas
+LEFT JOIN pizza_modifiers
+	USING (pizza_id)
+LEFT JOIN modifiers
+	USING (modifier_id)
+JOIN sizes
+	USING (size_id)
 WHERE order_id IN (
 SELECT order_id
 FROM pizzas
@@ -162,3 +168,5 @@ AND order_id NOT IN (
 SELECT order_id
 FROM pizzas
 WHERE pizza_id IN (SELECT pizza_id FROM pizza_toppings)); # order_id should not be in the non-cheese pizza list
+
+# 572 only cheese orders
